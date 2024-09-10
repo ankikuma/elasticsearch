@@ -12,16 +12,18 @@ import org.elasticsearch.telemetry.metric.LongHistogram;
 import org.elasticsearch.telemetry.metric.MeterRegistry;
 
 public class UpdateByQueryMetrics {
-    public static final String TOOK_TIME_HISTOGRAM = "es.update_by_query.took_time.histogram";
+    public static final String UPDATE_BY_QUERY_TIME_HISTOGRAM = "es.update_by_query.duration.histogram";
 
     private final LongHistogram updateByQueryTimeSecsHistogram;
 
     public UpdateByQueryMetrics(MeterRegistry meterRegistry) {
-        this(meterRegistry.registerLongHistogram(TOOK_TIME_HISTOGRAM, "Time taken by Update by Query request", "seconds"));
+        this(
+            meterRegistry.registerLongHistogram(UPDATE_BY_QUERY_TIME_HISTOGRAM, "Time taken to execute Update by Query request", "seconds")
+        );
     }
 
-    private UpdateByQueryMetrics(LongHistogram reindexTimeSecsHistogram) {
-        this.updateByQueryTimeSecsHistogram = reindexTimeSecsHistogram;
+    private UpdateByQueryMetrics(LongHistogram updateByQueryTimeSecsHistogram) {
+        this.updateByQueryTimeSecsHistogram = updateByQueryTimeSecsHistogram;
     }
 
     public long recordTookTime(long tookTime) {

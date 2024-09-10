@@ -21,6 +21,7 @@ import org.elasticsearch.cluster.node.DiscoveryNode;
 import org.elasticsearch.cluster.node.DiscoveryNodeRole;
 import org.elasticsearch.common.Priority;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryRewriteContext;
 import org.elasticsearch.plugins.Plugin;
@@ -114,7 +115,7 @@ public class RetrieverRewriteIT extends ESIntegTestCase {
                 throw new IllegalStateException("node did not stop");
             }
             assertBusy(() -> {
-                ClusterHealthResponse healthResponse = clusterAdmin().prepareHealth(testIndex)
+                ClusterHealthResponse healthResponse = clusterAdmin().prepareHealth(TEST_REQUEST_TIMEOUT, testIndex)
                     .setWaitForStatus(ClusterHealthStatus.RED) // we are now known red because the primary shard is missing
                     .setWaitForEvents(Priority.LANGUID) // ensures that the update has occurred
                     .execute()
@@ -139,6 +140,11 @@ public class RetrieverRewriteIT extends ESIntegTestCase {
 
         private AssertingRetrieverBuilder(RetrieverBuilder innerRetriever) {
             this.innerRetriever = innerRetriever;
+        }
+
+        @Override
+        public QueryBuilder topDocsQuery() {
+            return null;
         }
 
         @Override
@@ -198,6 +204,11 @@ public class RetrieverRewriteIT extends ESIntegTestCase {
         @Override
         public boolean isCompound() {
             return true;
+        }
+
+        @Override
+        public QueryBuilder topDocsQuery() {
+            return null;
         }
 
         @Override

@@ -127,6 +127,8 @@ public class VersionStatsTests extends AbstractWireSerializingTestCase<VersionSt
             null,
             null,
             new ShardStats[] { shardStats },
+            new SearchUsageStats(),
+            RepositoryUsageStats.EMPTY,
             null
         );
 
